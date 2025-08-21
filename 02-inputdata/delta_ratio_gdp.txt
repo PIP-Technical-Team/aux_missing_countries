@@ -1,0 +1,1 @@
+The GDP series with 2017 PPPs is no longer in WDI. This file was prepared by Samuel to convert the 2021 PPP series into 2017 PPPs. Perhaps in the future the GDP team in WDI can provide the 2017 PPP series directly.
