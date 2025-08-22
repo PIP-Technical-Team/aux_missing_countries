@@ -46,15 +46,11 @@ CF21[, `:=`(
   t2_qf = tier2_2021ppp["pct",] + 
           tier2_2021ppp["pct:eca",]*eca+
           tier2_2021ppp["pct:lac",]*lac+
-          tier2_2021ppp["pct:ssa",]*ssa,
-  
-  # Smearing
-  t1_sme = tier1_2021ppp["smearing",],
-  t2_sme = tier2_2021ppp["smearing",]
+          tier2_2021ppp["pct:ssa",]*ssa
   
 )]
 
-CF21 <- CF21[, .(code, year, t1_comp1, t1_qf, t2_comp1, t2_qf, t1_sme, t2_sme)]
+CF21 <- CF21[, .(code, year, t1_comp1, t1_qf, t2_comp1, t2_qf)]
 
 
 
@@ -93,15 +89,11 @@ CF17[, `:=`(
   t2_qf = tier2_2017ppp["pct",] + 
     tier2_2017ppp["pct:eca",]*eca+
     tier2_2017ppp["pct:lac",]*lac+
-    tier2_2017ppp["pct:ssa",]*ssa,
-  
-  # Smearing
-  t1_sme = tier1_2017ppp["smearing",],
-  t2_sme = tier2_2017ppp["smearing",]
+    tier2_2017ppp["pct:ssa",]*ssa
   
 )]
 
-CF17 <- CF17[, .(code, year, t1_comp1, t1_qf, t2_comp1, t2_qf, t1_sme, t2_sme)]
+CF17 <- CF17[, .(code, year, t1_comp1, t1_qf, t2_comp1, t2_qf)]
 
 #######################
 ### SAVE FINAL DATA ###
@@ -116,12 +108,12 @@ save(CF, file="04-outputdata/cmd_coeff.qs")
 # Sample prediction for Ethiopia 2021
 eth2021 <- data.frame(quantile = seq(1,1000,1)/1000-0.0005,code="ETH",year=2021) |>
   joyn::joyn(CF21,match_type="m:1",by=c("code","year"), keep="left",reportvar=FALSE) |>
-  mutate(y_tier1_21 = exp(t1_comp1+t1_qf*log(quantile/(1-quantile)))*t1_sme,
-         y_tier2_21 = exp(t2_comp1+t2_qf*log(quantile/(1-quantile)))*t2_sme) |>
+  mutate(y_tier1_21 = exp(t1_comp1+t1_qf*log(quantile/(1-quantile))),
+         y_tier2_21 = exp(t2_comp1+t2_qf*log(quantile/(1-quantile)))) |>
   select(code,year,y_tier1_21,y_tier2_21,quantile)  |>
   joyn::joyn(CF17,match_type="m:1",by=c("code","year"), keep="left",reportvar=FALSE) |>
-  mutate(y_tier1_17 = exp(t1_comp1+t1_qf*log(quantile/(1-quantile)))*t1_sme,
-         y_tier2_17 = exp(t2_comp1+t2_qf*log(quantile/(1-quantile)))*t2_sme) |>
+  mutate(y_tier1_17 = exp(t1_comp1+t1_qf*log(quantile/(1-quantile))),
+         y_tier2_17 = exp(t2_comp1+t2_qf*log(quantile/(1-quantile)))) |>
   select(starts_with("y_tier"),quantile) |>
   tidyr::pivot_longer(-quantile,names_to="type",values_to="y")
 
@@ -130,13 +122,13 @@ ggplot(data=eth2021) + geom_density(aes(x=y),color="blue") + facet_wrap(~type) +
 
 # Predict extreme poverty rates to make sure they are in the unit interval and broadly make sense 
 expr21 <- CF21 |>
-        mutate(tier1_21 = 100*(1+(t1_sme*exp(t1_comp1)/3)^(1/t1_qf))^(-1),
-               tier2_21 = 100*(1+(t2_sme*exp(t2_comp1)/3)^(1/t2_qf))^(-1)) |>
+        mutate(tier1_21 = 100*(1+(exp(t1_comp1)/3)^(1/t1_qf))^(-1),
+               tier2_21 = 100*(1+(exp(t2_comp1)/3)^(1/t2_qf))^(-1)) |>
         select(code,year,tier1_21,tier2_21)
 
 expr <- CF17 |>
-  mutate(tier1_17 = 100*(1+(t1_sme*exp(t1_comp1)/3)^(1/t1_qf))^(-1),
-         tier2_17 = 100*(1+(t2_sme*exp(t2_comp1)/3)^(1/t2_qf))^(-1)) |>
+  mutate(tier1_17 = 100*(1+(exp(t1_comp1)/3)^(1/t1_qf))^(-1),
+         tier2_17 = 100*(1+(exp(t2_comp1)/3)^(1/t2_qf))^(-1)) |>
   select(code,year,tier1_17,tier2_17) |>
   joyn::joyn(expr21,by=c("code","year"),match_type="1:1",reportvar=FALSE)
 

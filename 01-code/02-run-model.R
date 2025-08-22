@@ -97,27 +97,11 @@ tier2_2021ppp <- quantreg::rq(log(avg_welfare) ~ log(u5m)+leb+rps+              
 tier1_2017ppp <- quantreg::rq(log(avg_welfare) ~ log(u5m)+leb+rps+inc*log(gdp2017)+            pct+pct:eca+pct:lac+pct:ssa, weight=weight1, data=data2017)
 tier2_2017ppp <- quantreg::rq(log(avg_welfare) ~ log(u5m)+leb+rps+                 lmc+umc+hic+pct+pct:eca+pct:lac+pct:ssa, weight=weight2, data=data2017)
 
-# Calculate smearing factor
-tier1_2021ppp_smearing <- exp(mean(tier1_2021ppp$residuals))
-tier2_2021ppp_smearing <- exp(mean(tier2_2021ppp$residuals))
-tier1_2017ppp_smearing <- exp(mean(tier1_2017ppp$residuals))
-tier2_2017ppp_smearing <- exp(mean(tier2_2017ppp$residuals))
-
 # Store results
 tier1_2021ppp <- as.data.frame(tier1_2021ppp$coefficients)
 tier2_2021ppp <- as.data.frame(tier2_2021ppp$coefficients)
 tier1_2017ppp <- as.data.frame(tier1_2017ppp$coefficients)
 tier2_2017ppp <- as.data.frame(tier2_2017ppp$coefficients)
-
-# Add smearing factor to stored results
-tier1_2021ppp <- rbind(tier1_2021ppp, tier1_2021ppp_smearing)
-tier2_2021ppp <- rbind(tier2_2021ppp, tier2_2021ppp_smearing)
-tier1_2017ppp <- rbind(tier1_2017ppp, tier1_2017ppp_smearing)
-tier2_2017ppp <- rbind(tier2_2017ppp, tier2_2017ppp_smearing)
-rownames(tier2_2021ppp)[nrow(tier2_2021ppp)] <- "smearing"
-rownames(tier1_2021ppp)[nrow(tier1_2021ppp)] <- "smearing"
-rownames(tier2_2017ppp)[nrow(tier2_2017ppp)] <- "smearing"
-rownames(tier1_2017ppp)[nrow(tier1_2017ppp)] <- "smearing"
 
 ##########################
 ### SAVE FINAL RESULTS ###
