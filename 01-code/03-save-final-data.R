@@ -100,7 +100,7 @@ CF17 <- CF17[, .(code, year, t1_comp1, t1_qf, t2_comp1, t2_qf)]
 #######################
 CF <- list(ppp2021 = CF21, ppp2017 = CF17)
 
-save(CF, file="04-outputdata/cmd_coeff.qs")
+qs::qsave(CF, file="04-outputdata/cmd_coeff.qs")
 
 ####################################
 ### CHECK EVERYTHING MAKES SENSE ###
