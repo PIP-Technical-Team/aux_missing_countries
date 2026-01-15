@@ -22,7 +22,7 @@ load(covariates)
 #load('covariates.Rda')
 
 # Define file paths
-excel_file <- "PIP_MissingPoverty_Calculator_Pilot_v2.xlsx"
+excel_file <- "https://raw.githubusercontent.com/PIP-Technical-Team/aux_missing_countries/main/PIP_MissingPoverty_Calculator.xlsx"
 sheet_name <- "Input_Data"
 
 # Load the existing workbook or create new one
