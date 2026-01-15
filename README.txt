@@ -4,8 +4,9 @@ The repository contains three scripts.
 - 01-code/01-prepare-covariates.R: Gathers all the covariates needed to predict full distributions from various sources including WDI, the UN Population Prospects and more. It creates a country-year dataset with these covariates
 - 01-code/02-run-model.R: Matches the covariates gathered to survey-level welfare data in order to run regression models that predict how these covariates relate to welfare. It stores the coefficients from this model
 - 01-code/03-save-final-data.R: This script uses the file with the country-year-level covariates from the first script and the estimated coefficients from the second script to save a minimum dataset necessary to predict full distributions, which is then done further in the pipeline. It also contains some checks to make sure all makes sense and an example of how full distributions can be predicted from the output data.
+- 01-code/04-update-excel-tool.R: This program downloads the latest covariates data from 03-intermediatedata/covariates.Rda and updates PIP_MissingPoverty_Calculator.xlsx with the data and properly mapped column headers.
 
-To update this repository, it is only necessary to update the first and third scripts. The second script should only be updated if the model and coefficients should be re-estimated. 
+To update this repository, it is only necessary to update the first, third, and fourth scripts. The second script should only be updated if the model and coefficients should be re-estimated. 
 
 Note: The file 02-inputdata/wpp.xlsx is not in the GitHub repository because it is too large. It can be retrieved as follows:
 Visit 
