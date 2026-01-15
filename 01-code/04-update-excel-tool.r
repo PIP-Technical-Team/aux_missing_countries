@@ -8,6 +8,8 @@ if (!require("openxlsx", quietly = TRUE)) {
   library("openxlsx")
 }
 
+# show working directory
+cat("Current working directory:", getwd(), "\n")
 
 # Load the covariates data
 covariates <- tempfile(fileext = ".Rda")
@@ -22,7 +24,7 @@ load(covariates)
 #load('covariates.Rda')
 
 # Define file paths
-excel_file <- "https://raw.githubusercontent.com/PIP-Technical-Team/aux_missing_countries/main/PIP_MissingPoverty_Calculator.xlsx"
+excel_file <- "PIP_MissingPoverty_Calculator.xlsx"
 sheet_name <- "Input_Data"
 
 # Load the existing workbook or create new one
