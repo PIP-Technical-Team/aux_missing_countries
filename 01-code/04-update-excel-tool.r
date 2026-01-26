@@ -90,3 +90,7 @@ cat("Imported data dimensions:", nrow(covariates), "rows x", ncol(covariates), "
 cat("File saved to:", excel_file, "\n")
 cat("Sheet name:", sheet_name, "\n")
 
+# Create a csv file to store covariates data under 03-intermediatedata folder
+output_csv <- "03-intermediatedata/covariates.csv"
+write.csv(covariates, file = output_csv, row.names = FALSE)
+cat("Covariates data also saved to:", output_csv, "\n")
