@@ -105,6 +105,7 @@ qs::qsave(CF, file="04-outputdata/cmd_coeff.qs")
 ####################################
 ### CHECK EVERYTHING MAKES SENSE ###
 ####################################
+
 # Sample prediction for Ethiopia 2021
 eth2021 <- data.frame(quantile = seq(1,1000,1)/1000-0.0005,code="ETH",year=2021) |>
   joyn::joyn(CF21,match_type="m:1",by=c("code","year"), keep="left",reportvar=FALSE) |>
