@@ -34,13 +34,11 @@ if (file.exists(excel_file)) {
   wb <- createWorkbook()
 }
 
-# Check if the sheet exists, if not create it
-if (!sheet_name %in% names(wb)) {
-  addWorksheet(wb, sheet_name)
+# Delete the sheet if it exists, then recreate it (removes any existing tables)
+if (sheet_name %in% names(wb)) {
+  removeWorksheet(wb, sheet_name)
 }
-
-# Get the sheet
-ws <- wb[[sheet_name]]
+addWorksheet(wb, sheet_name)
 
 # Write the covariates data to the sheet, starting from cell A1
 # This will clear any existing data and write all new data
